@@ -1,0 +1,4 @@
+*.pyc
+.cache
+.python-version
+*.swp
