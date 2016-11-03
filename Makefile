@@ -1,2 +1,4 @@
-test:
-	PYTHONPATH=. py.test --pep8 .
+install:
+	pip install -U .
+test: install
+	py.test --pep8 .
