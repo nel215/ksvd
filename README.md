@@ -6,7 +6,9 @@ An K-SVD implementaion written in Python.
 
 ## Installation
 
-TODO
+```
+pip install ksvd
+```
 
 ## Usage
 
