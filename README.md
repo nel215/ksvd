@@ -3,6 +3,7 @@
 An K-SVD implementaion written in Python.
 
 [![Build Status](https://travis-ci.org/nel215/ksvd.svg?branch=master)](https://travis-ci.org/nel215/ksvd)
+[![PyPI](https://img.shields.io/pypi/v/ksvd.svg)](https://pypi.python.org/pypi/ksvd)
 
 ## Installation
 
