@@ -38,6 +38,7 @@ class ApproximateKSVD(object):
             D, gamma = self._update_dict(X, D, gamma)
 
         self.components_ = D
+        return self
 
     def transform(self, X):
         gram = self.components_.dot(self.components_.T)
