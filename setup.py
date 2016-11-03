@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='ksvd',
-    version='0.0.1',
+    version='0.0.2',
     description='An K-SVD implementaion written in Python.',
     author='nel215',
     author_email='otomo.yuhei@gmail.com',
