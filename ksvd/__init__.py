@@ -18,9 +18,10 @@ class ApproximateKSVD(object):
                 continue
 
             g = gamma[I, j].T
-            d = X[I, :].T.dot(g) - gamma[I, :].dot(D).T.dot(g)
+            r = X[I, :] - gamma[I, :].dot(D)
+            d = r.T.dot(g)
             d /= np.linalg.norm(d)
-            g = X[I, :].dot(d) - gamma[I, :].dot(D).dot(d)
+            g = r.dot(d)
             D[j, :] = d
             gamma[I, j] = g.T
         return D, gamma
