@@ -12,11 +12,11 @@ class ApproximateKSVD(object):
 
     def _update_dict(self, X, D, gamma):
         for j in range(self.n_components):
-            D[j, :] = 0
             I = gamma[:, j] > 0
             if np.sum(I) == 0:
                 continue
 
+            D[j, :] = 0
             g = gamma[I, j].T
             r = X[I, :] - gamma[I, :].dot(D)
             d = r.T.dot(g)
@@ -28,6 +28,7 @@ class ApproximateKSVD(object):
 
     def fit(self, X):
         D = np.random.randn(self.n_components, X.shape[1])
+        D /= np.linalg.norm(D, axis=1)[:, np.newaxis]
         for i in range(self.max_iter):
             gram = D.dot(D.T)
             Xy = D.dot(X.T)
