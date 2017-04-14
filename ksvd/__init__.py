@@ -1,5 +1,6 @@
 # coding:utf-8
 import numpy as np
+import scipy as sp
 from sklearn.linear_model import orthogonal_mp_gram
 
 
@@ -26,8 +27,18 @@ class ApproximateKSVD(object):
             gamma[I, j] = g.T
         return D, gamma
 
+    def _initialize(self, X):
+        u, s, vt = sp.sparse.linalg.svds(X, k=self.n_components)
+        return np.dot(np.diag(s), vt)
+
+
     def fit(self, X):
-        D = np.random.randn(self.n_components, X.shape[1])
+        """
+        Parameters
+        ----------
+        X: shape = [n_samples, n_features]
+        """
+        D = self._initialize(X)
         D /= np.linalg.norm(D, axis=1)[:, np.newaxis]
         for i in range(self.max_iter):
             gram = D.dot(D.T)
