@@ -5,11 +5,14 @@ from sklearn.linear_model import orthogonal_mp_gram
 
 
 class ApproximateKSVD(object):
-    def __init__(self, n_components):
+    def __init__(self, n_components, n_nonzero_coefs=None):
         self.components_ = None
         self.max_iter = 2
         self.tol = 1e-6
         self.n_components = n_components
+        self.n_nonzero_coefs = n_nonzero_coefs
+        if self.n_nonzero_coefs is None:
+            self.n_nonzero_coefs = n_components
 
     def _update_dict(self, X, D, gamma):
         for j in range(self.n_components):
@@ -43,7 +46,7 @@ class ApproximateKSVD(object):
         for i in range(self.max_iter):
             gram = D.dot(D.T)
             Xy = D.dot(X.T)
-            gamma = orthogonal_mp_gram(gram, Xy).T
+            gamma = orthogonal_mp_gram(gram, Xy, n_nonzero_coefs=self.n_nonzero_coefs).T
             e = np.linalg.norm(X - gamma.dot(D))
             if e < self.tol:
                 break
@@ -55,5 +58,5 @@ class ApproximateKSVD(object):
     def transform(self, X):
         gram = self.components_.dot(self.components_.T)
         Xy = self.components_.dot(X.T)
-        gamma = orthogonal_mp_gram(gram, Xy).T
+        gamma = orthogonal_mp_gram(gram, Xy, n_nonzero_coefs=self.n_nonzero_coefs).T
         return gamma
