@@ -34,6 +34,12 @@ class ApproximateKSVD(object):
         u, s, vt = sp.sparse.linalg.svds(X, k=self.n_components)
         return np.dot(np.diag(s), vt)
 
+    def _transform(self, D, X):
+        gram = D.dot(D.T)
+        Xy = D.dot(X.T)
+        return orthogonal_mp_gram(
+            gram, Xy, n_nonzero_coefs=self.n_nonzero_coefs).T
+
     def fit(self, X):
         """
         Parameters
@@ -43,10 +49,7 @@ class ApproximateKSVD(object):
         D = self._initialize(X)
         D /= np.linalg.norm(D, axis=1)[:, np.newaxis]
         for i in range(self.max_iter):
-            gram = D.dot(D.T)
-            Xy = D.dot(X.T)
-            gamma = orthogonal_mp_gram(
-                gram, Xy, n_nonzero_coefs=self.n_nonzero_coefs).T
+            gamma = self._transform(D, X)
             e = np.linalg.norm(X - gamma.dot(D))
             if e < self.tol:
                 break
@@ -56,8 +59,4 @@ class ApproximateKSVD(object):
         return self
 
     def transform(self, X):
-        gram = self.components_.dot(self.components_.T)
-        Xy = self.components_.dot(X.T)
-        gamma = orthogonal_mp_gram(
-            gram, Xy, n_nonzero_coefs=self.n_nonzero_coefs).T
-        return gamma
+        return self._transform(self.components_, X)
