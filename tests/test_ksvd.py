@@ -3,14 +3,18 @@ from ksvd import ApproximateKSVD
 from sklearn.decomposition import DictionaryLearning
 from sklearn.utils.testing import assert_array_almost_equal
 import numpy as np
+import scipy as sp
 from scipy.linalg import norm
 
 
 def test_fit():
     np.random.seed(0)
     N = 1000
-    L = 256
-    X = np.random.randn(N, 20) + np.random.rand(N, 20)
+    L = 64
+    n_features = 128
+    B = np.array(sp.sparse.random(N, L, density=0.5).todense())
+    D = np.random.randn(L, n_features)
+    X = np.dot(B, D)
     dico = ApproximateKSVD(n_components=L)
     dico.fit(X)
     gamma = dico.transform(X)
@@ -19,15 +23,18 @@ def test_fit():
 
 def test_size():
     np.random.seed(0)
-    N = 100
-    L = 128
-    X = np.random.randn(N, 10) + np.random.rand(N, 10)
+    N = 50
+    L = 12
+    n_features = 16
+    D = np.random.randn(L, n_features)
+    B = np.array(sp.sparse.random(N, L, density=0.5).todense())
+    X = np.dot(B, D)
     dico1 = ApproximateKSVD(n_components=L)
     dico1.fit(X)
     gamma1 = dico1.transform(X)
     e1 = norm(X - gamma1.dot(dico1.components_))
 
-    dico2 = DictionaryLearning(n_components=L)
+    dico2 = DictionaryLearning(n_components=L, transform_n_nonzero_coefs=L)
     dico2.fit(X)
     gamma2 = dico2.transform(X)
     e2 = norm(X - gamma2.dot(dico2.components_))
