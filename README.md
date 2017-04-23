@@ -29,6 +29,10 @@ gamma = aksvd.transform(X)
 
 - Approximate K-SVD
 
+## Example
+
+- [nel215/image-noise-reduction](https://github.com/nel215/image-noise-reduction)
+
 ## License
 
 Licensed under the Apache License 2.0.
