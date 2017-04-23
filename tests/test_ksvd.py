@@ -7,6 +7,15 @@ import scipy as sp
 from scipy.linalg import norm
 
 
+def test_initialize_with_small_n_features():
+    N = 500
+    n_components = 128
+    n_features = 64
+    X = np.random.randn(N, n_features)
+    dico = ApproximateKSVD(n_components=n_components)
+    dico.fit(X)
+
+
 def test_fit():
     np.random.seed(0)
     N = 1000

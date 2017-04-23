@@ -31,8 +31,13 @@ class ApproximateKSVD(object):
         return D, gamma
 
     def _initialize(self, X):
-        u, s, vt = sp.sparse.linalg.svds(X, k=self.n_components)
-        return np.dot(np.diag(s), vt)
+        if min(X.shape) < self.n_components:
+            D = np.random.randn(self.n_components, X.shape[1])
+        else:
+            u, s, vt = sp.sparse.linalg.svds(X, k=self.n_components)
+            D = np.dot(np.diag(s), vt)
+        D /= np.linalg.norm(D, axis=1)[:, np.newaxis]
+        return D
 
     def _transform(self, D, X):
         gram = D.dot(D.T)
@@ -47,7 +52,6 @@ class ApproximateKSVD(object):
         X: shape = [n_samples, n_features]
         """
         D = self._initialize(X)
-        D /= np.linalg.norm(D, axis=1)[:, np.newaxis]
         for i in range(self.max_iter):
             gamma = self._transform(D, X)
             e = np.linalg.norm(X - gamma.dot(D))
