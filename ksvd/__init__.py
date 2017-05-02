@@ -5,7 +5,8 @@ from sklearn.linear_model import orthogonal_mp_gram
 
 
 class ApproximateKSVD(object):
-    def __init__(self, n_components, transform_n_nonzero_coefs=None):
+    def __init__(self, n_components, max_iter=10, tol=1e-6,
+                 transform_n_nonzero_coefs=None):
         """
         Parameters
         ----------
@@ -16,8 +17,8 @@ class ApproximateKSVD(object):
             Number of nonzero coefficients to target
         """
         self.components_ = None
-        self.max_iter = 2
-        self.tol = 1e-6
+        self.max_iter = max_iter
+        self.tol = tol
         self.n_components = n_components
         self.transform_n_nonzero_coefs = transform_n_nonzero_coefs
 
