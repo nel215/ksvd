@@ -13,6 +13,12 @@ class ApproximateKSVD(object):
         n_components:
             Number of dictionary elements
 
+        max_iter:
+            Maximum number of iterations
+
+        tol:
+            tolerance for error
+
         transform_n_nonzero_coefs:
             Number of nonzero coefficients to target
         """
