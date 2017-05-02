@@ -20,8 +20,6 @@ class ApproximateKSVD(object):
         self.tol = 1e-6
         self.n_components = n_components
         self.transform_n_nonzero_coefs = transform_n_nonzero_coefs
-        if self.transform_n_nonzero_coefs is None:
-            self.transform_n_nonzero_coefs = n_components
 
     def _update_dict(self, X, D, gamma):
         for j in range(self.n_components):
@@ -51,8 +49,13 @@ class ApproximateKSVD(object):
     def _transform(self, D, X):
         gram = D.dot(D.T)
         Xy = D.dot(X.T)
+
+        n_nonzero_coefs = self.transform_n_nonzero_coefs
+        if n_nonzero_coefs is None:
+            n_nonzero_coefs = int(0.1 * X.shape[1])
+
         return orthogonal_mp_gram(
-            gram, Xy, n_nonzero_coefs=self.transform_n_nonzero_coefs).T
+            gram, Xy, n_nonzero_coefs=n_nonzero_coefs).T
 
     def fit(self, X):
         """
