@@ -85,7 +85,7 @@ class ApproximateKSVD(object):
         for i in range(self.max_iter):
             gamma = self._transform(D, X)
             e = np.linalg.norm(X - gamma.dot(D))
-            if not verbose_log:
+            if verbose_log:
                 print('Iter: %d, Err: %.4f' % (i, e))
             if e < self.tol:
                 break
