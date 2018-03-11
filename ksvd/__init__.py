@@ -64,16 +64,29 @@ class ApproximateKSVD(object):
         return orthogonal_mp_gram(
             gram, Xy, n_nonzero_coefs=n_nonzero_coefs).T
 
-    def fit(self, X):
+    def fit(self, X, pretrained_D=None, verbose_log=False):
         """
         Parameters
         ----------
-        X: shape = [n_samples, n_features]
+        X:
+            shape = [n_samples, n_features]
+
+        pretrained_D:
+            Load pretrained dictionary
+
+        verbose_log:
+            Print current iteration and error
         """
-        D = self._initialize(X)
+        if pretrained_D is None:
+            D = self._initialize(X)
+        else:
+            D = pretrained_D
+
         for i in range(self.max_iter):
             gamma = self._transform(D, X)
             e = np.linalg.norm(X - gamma.dot(D))
+            if verbose_log:
+                print('Iter: %d, Err: %.4f' % (i, e))
             if e < self.tol:
                 break
             D, gamma = self._update_dict(X, D, gamma)
