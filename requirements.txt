@@ -10,7 +10,7 @@ py==1.4.31
 pytest==3.0.3
 pytest-cache==1.0
 pytest-pep8==1.0.6
-requests==2.11.1
+requests==2.20.0
 requests-toolbelt==0.7.0
 scikit-learn==0.18
 scipy==0.18.1
